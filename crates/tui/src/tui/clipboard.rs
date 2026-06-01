@@ -228,6 +228,7 @@ fn read_text_with_wlpaste() -> Result<String> {
 #[cfg(any(all(test, unix), target_os = "linux"))]
 fn read_text_with_wlpaste_using_argv(program: &str) -> Result<String> {
     let output = Command::new(program)
+        .arg("--no-newline")
         .arg("--type")
         .arg("text/plain")
         .stdout(Stdio::piped())
@@ -455,7 +456,30 @@ mod tests {
     fn wl_paste_helper_reads_text_from_stdout() {
         let dir = tempfile::tempdir().unwrap();
         let script = dir.path().join("wl-paste");
-        std::fs::write(&script, "#!/bin/sh\nprintf 'from-wayland'\n").unwrap();
+        std::fs::write(
+            &script,
+            r#"#!/bin/sh
+seen_no_newline=0
+seen_text_plain=0
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --no-newline) seen_no_newline=1 ;;
+    --type)
+      shift
+      [ "${1:-}" = "text/plain" ] && seen_text_plain=1
+      ;;
+  esac
+  shift
+done
+[ "$seen_text_plain" -eq 1 ] || exit 40
+if [ "$seen_no_newline" -eq 1 ]; then
+  printf 'from-wayland'
+else
+  printf 'from-wayland\n'
+fi
+"#,
+        )
+        .unwrap();
         let mut perms = std::fs::metadata(&script).unwrap().permissions();
         perms.set_mode(0o755);
         std::fs::set_permissions(&script, perms).unwrap();
