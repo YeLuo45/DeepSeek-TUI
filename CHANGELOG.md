@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.54] - 2026-06-08
+
+### Added
+
+- **Benchmark harness runners.** Added CodeWhale-native benchmark entry points for SWE-bench, Terminal-Bench, and PinchBench, plus a local PinchBench runner that can grade tool-use traces with an LLM judge.
+- **Direct MiMo benchmark routing.** The benchmark runner now defaults to direct Xiaomi MiMo v2.5 Pro routing when configured, while keeping provider/model selection explicit.
+
+### Fixed
+
+- **Benchmark workspace copying.** Fixed benchmark workspace file copying so local benchmark tasks can preserve their intended file layout during agent runs.
+- **MiMo default tests.** Guarded Xiaomi MiMo default-model tests against ambient CI provider environment variables.
+
 ## [0.8.53] - 2026-06-03
 
 ### Added
@@ -5411,7 +5423,8 @@ Welcome — and thank you.
 - Hooks system and config profiles
 - Example skills and launch assets
 
-[Unreleased]: https://github.com/Hmbown/CodeWhale/compare/v0.8.53...HEAD
+[Unreleased]: https://github.com/Hmbown/CodeWhale/compare/v0.8.54...HEAD
+[0.8.54]: https://github.com/Hmbown/CodeWhale/compare/v0.8.53...v0.8.54
 [0.8.53]: https://github.com/Hmbown/CodeWhale/compare/v0.8.52...v0.8.53
 [0.8.52]: https://github.com/Hmbown/CodeWhale/compare/v0.8.51...v0.8.52
 [0.8.51]: https://github.com/Hmbown/CodeWhale/compare/v0.8.50...v0.8.51
